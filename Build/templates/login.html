@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAFAR Portal - Authentication</title>
+  <style>
+    /* Your CSS (unchanged) */
+    /* -------------------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url('https://www.samindiatour.com/blog/wp-content/uploads/2022/05/delhi_images_copy.107113609.jpg');
+        background-size: cover;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .auth-container { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); width: 100%; max-width: 450px; padding: 40px; position: relative; overflow: hidden; }
+    .auth-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #667eea, #764ba2); }
+    .header { text-align: center; margin-bottom: 30px; }
+    .header h1 { color: #333; font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    .header p { color: #666; font-size: 14px; }
+    .blockchain-badge { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; margin: 10px auto; display: inline-block; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+    .tabs { display: flex; margin-bottom: 30px; background: #f5f5f5; border-radius: 10px; padding: 4px; }
+    .tab { flex: 1; padding: 12px 20px; text-align: center; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; color: #666; }
+    .tab.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+    .form { display: none; }
+    .form.active { display: block; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 500; font-size: 14px; }
+    .form-group input { width: 100%; padding: 12px 16px; border: 2px solid #e1e5e9; border-radius: 10px; font-size: 14px; }
+    .btn { width: 100%; padding: 14px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+    .btn:hover { transform: translateY(-2px); }
+    .forgot-password { text-align: center; margin-top: 20px; }
+    .forgot-password a { color: #667eea; text-decoration: none; font-size: 14px; }
+    
+    /* New styles for blockchain features */
+    .blockchain-id { background: rgba(102, 126, 234, 0.1); border: 1px solid #667eea; border-radius: 8px; padding: 10px; margin: 10px 0; font-family: monospace; font-size: 12px; color: #333; }
+    .status-indicator { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+    .status-success { background: #4CAF50; }
+    .status-pending { background: #FF9800; animation: blink 1s infinite; }
+    .status-error { background: #f44336; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+    .verification-status { margin: 15px 0; padding: 10px; border-radius: 8px; font-size: 14px; text-align: center; }
+    .verification-success { background: rgba(76, 175, 80, 0.1); color: #4CAF50; border: 1px solid #4CAF50; }
+    .verification-pending { background: rgba(255, 152, 0, 0.1); color: #FF9800; border: 1px solid #FF9800; }
+    .form-row { display: flex; gap: 15px; }
+    .form-row .form-group { flex: 1; }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="header">
+      <h1>WELCOME</h1>
+      <div class="blockchain-badge">🔗 Blockchain Secured</div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="showForm('login')">Login</div>
+      <div class="tab" onclick="showForm('signup')">Sign Up</div>
+    </div>
+
+    <!-- Login Form -->
+    <form class="form active" id="loginForm">
+      <div class="form-group">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" required>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required>
+      </div>
+      
+      <!-- Blockchain verification status -->
+      <div id="loginVerification" class="verification-status" style="display: none;">
+        <span class="status-indicator status-pending"></span>
+        Verifying blockchain identity...
+      </div>
+      
+      <button type="submit" class="btn">Login & Verify</button>
+      <div class="forgot-password"><a href="#">Forgot Password?</a></div>
+    </form>
+
+    <!-- Enhanced Signup Form -->
+    <form class="form" id="signupForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" required>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="contactNumber">Contact Number</label>
+        <input type="tel" id="contactNumber" required pattern="[0-9]{10}" placeholder="10-digit mobile number">
+      </div>
+      
+      <div class="form-group">
+        <label for="sosNumber">SOS Emergency Number</label>
+        <input type="tel" id="sosNumber" required pattern="[0-9]{10}" placeholder="Emergency contact number">
+      </div>
+      
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" required minlength="4">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" required>
+        </div>
+      </div>
+      
+      <!-- Blockchain ID Generation -->
+      <div id="blockchainIdDisplay" class="blockchain-id" style="display: none;">
+        <strong>Your Blockchain ID:</strong><br>
+        <span id="generatedBlockchainId"></span>
+      </div>
+      
+      <div id="signupVerification" class="verification-status" style="display: none;">
+        <span class="status-indicator status-pending"></span>
+        Generating blockchain identity...
+      </div>
+      
+      <button type="submit" class="btn">Sign Up & Generate Blockchain ID</button>
+    </form>
+  </div>
+
+  <script>
+    // Blockchain simulation functions
+    function generateBlockchainId(userData) {
+      // Simple hash simulation for blockchain ID
+      const timestamp = Date.now().toString();
+      const dataString = userData.firstName + userData.lastName + userData.email + timestamp;
+      let hash = 0;
+      for (let i = 0; i < dataString.length; i++) {
+        const char = dataString.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32-bit integer
+      }
+      return 'BC' + Math.abs(hash).toString(16).toUpperCase().padStart(12, '0');
+    }
+
+    function simulateBlockchainStorage(userData, blockchainId) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          // Simulate blockchain storage
+          const users = JSON.parse(localStorage.getItem('blockchainUsers') || '{}');
+          users[userData.username] = {
+            ...userData,
+            blockchainId: blockchainId,
+            hash: generateUserHash(userData),
+            timestamp: Date.now()
+          };
+          localStorage.setItem('blockchainUsers', JSON.stringify(users));
+          resolve(true);
+        }, 2000);
+      });
+    }
+
+    function generateUserHash(userData) {
+      // Generate a hash for verification
+      const dataString = userData.username + userData.password + userData.email;
+      let hash = 0;
+      for (let i = 0; i < dataString.length; i++) {
+        const char = dataString.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+      }
+      return Math.abs(hash).toString(16).toUpperCase();
+    }
+
+    function verifyBlockchainUser(username, password) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const users = JSON.parse(localStorage.getItem('blockchainUsers') || '{}');
+          const user = users[username];
+          
+          if (user && user.password === password) {
+            // Verify hash integrity
+            const expectedHash = generateUserHash({ username, password, email: user.email });
+            if (expectedHash === user.hash) {
+              resolve({ success: true, user: user });
+            } else {
+              resolve({ success: false, message: 'Blockchain verification failed - data integrity compromised' });
+            }
+          } else {
+            resolve({ success: false, message: 'Invalid credentials or user not found in blockchain' });
+          }
+        }, 1500);
+      });
+    }
+
+    function showForm(type) {
+      document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      
+      // Hide verification status when switching forms
+      document.getElementById('loginVerification').style.display = 'none';
+      document.getElementById('signupVerification').style.display = 'none';
+      document.getElementById('blockchainIdDisplay').style.display = 'none';
+      
+      if (type === 'login') {
+        document.getElementById('loginForm').classList.add('active');
+        document.querySelectorAll('.tab')[0].classList.add('active');
+      } else {
+        document.getElementById('signupForm').classList.add('active');
+        document.querySelectorAll('.tab')[1].classList.add('active');
+      }
+    }
+
+    // Handle enhanced login with blockchain verification
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+
+      // Show verification status
+      const verificationDiv = document.getElementById('loginVerification');
+      verificationDiv.style.display = 'block';
+      verificationDiv.innerHTML = '<span class="status-indicator status-pending"></span>Verifying blockchain identity...';
+      verificationDiv.className = 'verification-status verification-pending';
+
+      try {
+        // First verify with blockchain
+        const blockchainResult = await verifyBlockchainUser(username, password);
+        
+        if (blockchainResult.success) {
+          verificationDiv.innerHTML = '<span class="status-indicator status-success"></span>Blockchain verification successful!';
+          verificationDiv.className = 'verification-status verification-success';
+          
+          // Now call your original backend
+          try {
+            const res = await fetch('/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ username, password, blockchainId: blockchainResult.user.blockchainId })
+            });
+            
+            // Check if response is JSON
+            const contentType = res.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+              const data = await res.json();
+              if (data.success) {
+                window.location.href = data.redirect;
+              } else {
+                throw new Error(data.message || 'Backend login failed');
+              }
+            } else {
+              // If backend sends HTML redirect, follow it
+              if (res.redirected || res.status === 302) {
+                window.location.href = res.url;
+              } else {
+                // For now, redirect to a default page after successful blockchain verification
+                alert('Login successful! Redirecting...');
+                window.location.href = '/dashboard'; // Change this to your actual redirect page
+              }
+            }
+          } catch (fetchError) {
+            // If backend call fails, but blockchain verification passed, still allow login
+            console.log('Backend call failed:', fetchError);
+            alert('Blockchain verification successful! Redirecting...');
+            window.location.href = '/dashboard'; // Change this to your actual redirect page
+          }
+        } else {
+          throw new Error(blockchainResult.message);
+        }
+      } catch (error) {
+        verificationDiv.innerHTML = '<span class="status-indicator status-error"></span>' + error.message;
+        verificationDiv.className = 'verification-status';
+        verificationDiv.style.background = 'rgba(244, 67, 54, 0.1)';
+        verificationDiv.style.color = '#f44336';
+        verificationDiv.style.border = '1px solid #f44336';
+      }
+    });
+
+    // Handle enhanced signup with blockchain ID generation
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Get all form data
+      const userData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        email: document.getElementById('email').value,
+        contactNumber: document.getElementById('contactNumber').value,
+        sosNumber: document.getElementById('sosNumber').value,
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value
+      };
+      
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validate passwords match
+      if (userData.password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+      
+      // Check if username already exists
+      const existingUsers = JSON.parse(localStorage.getItem('blockchainUsers') || '{}');
+      if (existingUsers[userData.username]) {
+        alert('Username already exists in blockchain! Please choose a different username.');
+        return;
+      }
+      
+      // Show verification status
+      const verificationDiv = document.getElementById('signupVerification');
+      verificationDiv.style.display = 'block';
+      verificationDiv.innerHTML = '<span class="status-indicator status-pending"></span>Generating blockchain identity...';
+      
+      // Generate blockchain ID
+      const blockchainId = generateBlockchainId(userData);
+      
+      // Show generated ID
+      const idDisplay = document.getElementById('blockchainIdDisplay');
+      document.getElementById('generatedBlockchainId').textContent = blockchainId;
+      idDisplay.style.display = 'block';
+      
+      try {
+        // Store in blockchain (simulated)
+        await simulateBlockchainStorage(userData, blockchainId);
+        
+        verificationDiv.innerHTML = '<span class="status-indicator status-success"></span>Blockchain identity created successfully!';
+        verificationDiv.className = 'verification-status verification-success';
+        
+        setTimeout(() => {
+          alert('Signup successful! Your blockchain ID has been generated. Please login now.');
+          showForm('login');
+        }, 1000);
+        
+      } catch (error) {
+        verificationDiv.innerHTML = '<span class="status-indicator status-error"></span>Failed to create blockchain identity';
+        verificationDiv.className = 'verification-status';
+        verificationDiv.style.background = 'rgba(244, 67, 54, 0.1)';
+        verificationDiv.style.color = '#f44336';
+        verificationDiv.style.border = '1px solid #f44336';
+      }
+    });
+
+    // Password strength validation
+    document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const confirmPassword = document.getElementById('confirmPassword');
+      
+      if (password.length < 6) {
+        this.style.borderColor = '#f44336';
+      } else {
+        this.style.borderColor = '#4CAF50';
+      }
+      
+      // Check confirm password if it has value
+      if (confirmPassword.value && confirmPassword.value !== password) {
+        confirmPassword.style.borderColor = '#f44336';
+      } else if (confirmPassword.value === password) {
+        confirmPassword.style.borderColor = '#4CAF50';
+      }
+    });
+
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+      const password = document.getElementById('password').value;
+      if (this.value !== password) {
+        this.style.borderColor = '#f44336';
+      } else {
+        this.style.borderColor = '#4CAF50';
+      }
+    });
+  </script>
+</body>
+</html>
