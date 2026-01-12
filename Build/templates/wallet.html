@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Your Digital Wallet</title>
+<style>
+body { font-family: Arial,sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin:0; padding:0; display:flex; justify-content:center; align-items:flex-start; min-height:100vh; }
+.container { max-width:400px; width:100%; padding:20px; }
+.card { background:white; border-radius:12px; padding:20px; margin-top:20px; box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+h2 { margin-top:0; text-align:center; }
+input, button { display:block; width:100%; padding:10px; margin:10px 0; font-size:16px; border-radius:6px; border:1px solid #ccc; }
+button { cursor:pointer; background: linear-gradient(135deg, #667eea, #764ba2); color:white; border:none; }
+.history { margin-top:20px; max-height:200px; overflow-y:auto; background:#eee; padding:10px; border-radius:6px; }
+.balance { font-size:18px; font-weight:bold; margin:10px 0; text-align:center; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <h2>Your DIGITAL Wallet</h2>
+
+    <button onclick="goHome()">⬅ Back to Home</button>
+
+    <div class="balance" id="balanceDisplay">Balance: ₹0</div>
+
+    <!-- Add Money -->
+    <label>Add Money:</label>
+    <input type="number" id="addAmount" placeholder="Enter amount to add">
+    <button onclick="addMoney()">Add Money</button>
+
+    <!-- Pay Money -->
+    <label>Recipient:</label>
+    <input type="text" id="recipient" placeholder="Enter recipient name or scan QR">
+    <label>Amount:</label>
+    <input type="number" id="amount" placeholder="Enter amount">
+    <button onclick="pay()">Pay Now</button>
+
+    <!-- Scan QR (simulated) -->
+    <button onclick="scanQR()">📷 Scan QR</button>
+
+    <button onclick="showHistory()">Transaction History</button>
+    <div class="history" id="history"></div>
+  </div>
+</div>
+
+<script>
+const userId = "demo_user";
+
+// Initialize wallet
+if(!localStorage.getItem("wallet")) {
+  localStorage.setItem("wallet", JSON.stringify({balance:0, transactions:[]}));
+}
+
+function getWallet() { return JSON.parse(localStorage.getItem("wallet")); }
+function saveWallet(wallet) { localStorage.setItem("wallet", JSON.stringify(wallet)); updateBalance(); }
+function updateBalance() { document.getElementById("balanceDisplay").textContent = 'Balance: ₹${getWallet().balance};' }
+function goHome() { 
+    window.location.href = "index.html";  // or "dashboard.html" - whatever your dashboard file is named
+}
+
+// Add money to wallet
+function addMoney() {
+  const amt = parseFloat(document.getElementById("addAmount").value);
+  if(!amt || amt<=0) return alert("Enter a valid amount");
+  const wallet = getWallet();
+  wallet.balance += amt;
+  saveWallet(wallet);
+  alert('✅ Added ₹${amt} to wallet');
+  document.getElementById("addAmount").value="";
+}
+
+// Pay money
+function pay() {
+  const recipient = document.getElementById("recipient").value.trim();
+  const amount = parseFloat(document.getElementById("amount").value);
+  const wallet = getWallet();
+
+  if(!recipient || !amount || amount<=0) return alert("Enter valid recipient and amount");
+  if(amount > wallet.balance) return alert("Insufficient balance!");
+
+  wallet.balance -= amount;
+  wallet.transactions.push({timestamp:new Date().toISOString(), recipient, amount});
+  saveWallet(wallet);
+
+  alert('✅ Paid ₹${amount} to ${recipient}');
+  document.getElementById("recipient").value="";
+  document.getElementById("amount").value="";
+}
+
+// Transaction history
+function showHistory() {
+  const wallet = getWallet();
+  const html = wallet.transactions.length
+    ? wallet.transactions.map(t=><p>${t.timestamp}: Paid ₹${t.amount} to ${t.recipient}</p>).join("")
+    : "<p>No transactions yet</p>";
+  document.getElementById("history").innerHTML=html;
+}
+
+// Scan QR (simulated)
+function scanQR() {
+  const qrRecipient = prompt("Simulate QR scan: Enter recipient name");
+  if(qrRecipient) {
+    document.getElementById("recipient").value = qrRecipient;
+    alert('Scanned recipient: ${qrRecipient}');
+  }
+}
+
+updateBalance();
+</script>
+</body>
+</html>
