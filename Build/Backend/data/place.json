@@ -1,0 +1,170 @@
+[
+  {
+    "name": "Police Station CP",
+    "type": "police",
+    "lat": 28.6315,
+    "lng": 77.2167,
+    "address": "Connaught Place, New Delhi",
+    "phone": "011-23412345"
+  },
+  {
+    "name": "State Bank CP",
+    "type": "bank",
+    "lat": 28.6305,
+    "lng": 77.2170,
+    "address": "A Block, Connaught Place",
+    "phone": "011-23421234"
+  },
+  {
+    "name": "Petrol Pump RK Marg",
+    "type": "petrol",
+    "lat": 28.6321,
+    "lng": 77.2202,
+    "address": "Rajpath Marg, New Delhi",
+    "phone": "011-23456789"
+  },
+  {
+    "name": "Karol Bagh Police Station",
+    "type": "police",
+    "lat": 28.6520,
+    "lng": 77.1910,
+    "address": "Karol Bagh, New Delhi",
+    "phone": "011-25752041"
+  },
+  {
+    "name": "HDFC Bank Karol Bagh",
+    "type": "bank",
+    "lat": 28.6510,
+    "lng": 77.1900,
+    "address": "DB Gupta Road, Karol Bagh",
+    "phone": "011-25754321"
+  },
+  {
+    "name": "HP Petrol Pump Karol Bagh",
+    "type": "petrol",
+    "lat": 28.6525,
+    "lng": 77.1920,
+    "address": "Pusa Road, Karol Bagh",
+    "phone": "011-25751234"
+  },
+  {
+    "name": "Saket Police Station",
+    "type": "police",
+    "lat": 28.5250,
+    "lng": 77.2070,
+    "address": "Saket, New Delhi",
+    "phone": "011-26960123"
+  },
+  {
+    "name": "ICICI Bank Saket",
+    "type": "bank",
+    "lat": 28.5240,
+    "lng": 77.2060,
+    "address": "Saket District Centre",
+    "phone": "011-26965432"
+  },
+  {
+    "name": "Indian Oil Petrol Pump Saket",
+    "type": "petrol",
+    "lat": 28.5255,
+    "lng": 77.2080,
+    "address": "Press Enclave Road, Saket",
+    "phone": "011-26967890"
+  },
+  {
+    "name": "Hauz Khas Police Station",
+    "type": "police",
+    "lat": 28.5500,
+    "lng": 77.2010,
+    "address": "Hauz Khas, New Delhi",
+    "phone": "011-26967890"
+  },
+  {
+    "name": "SBI Hauz Khas",
+    "type": "bank",
+    "lat": 28.5490,
+    "lng": 77.1995,
+    "address": "Hauz Khas Village",
+    "phone": "011-26961111"
+  },
+  {
+    "name": "Bharat Petroleum Hauz Khas",
+    "type": "petrol",
+    "lat": 28.5505,
+    "lng": 77.2020,
+    "address": "Aurobindo Marg, Hauz Khas",
+    "phone": "011-26962222"
+  },
+  {
+    "name": "Chandni Chowk Police Station",
+    "type": "police",
+    "lat": 28.6510,
+    "lng": 77.2310,
+    "address": "Chandni Chowk, Old Delhi",
+    "phone": "011-23961234"
+  },
+  {
+    "name": "PNB Chandni Chowk",
+    "type": "bank",
+    "lat": 28.6500,
+    "lng": 77.2300,
+    "address": "Main Bazaar, Chandni Chowk",
+    "phone": "011-23965555"
+  },
+  {
+    "name": "Essar Petrol Pump Red Fort",
+    "type": "petrol",
+    "lat": 28.6520,
+    "lng": 77.2320,
+    "address": "Near Red Fort, Delhi",
+    "phone": "011-23966666"
+  },
+  {
+    "name": "Lajpat Nagar Police Station",
+    "type": "police",
+    "lat": 28.5680,
+    "lng": 77.2435,
+    "address": "Lajpat Nagar, New Delhi",
+    "phone": "011-24651234"
+  },
+  {
+    "name": "Axis Bank Lajpat Nagar",
+    "type": "bank",
+    "lat": 28.5675,
+    "lng": 77.2425,
+    "address": "Central Market, Lajpat Nagar",
+    "phone": "011-24657777"
+  },
+  {
+    "name": "Shell Petrol Pump Lajpat Nagar",
+    "type": "petrol",
+    "lat": 28.5685,
+    "lng": 77.2440,
+    "address": "Ring Road, Lajpat Nagar",
+    "phone": "011-24658888"
+  },
+  {
+    "name": "South Extension Police Post",
+    "type": "police",
+    "lat": 28.5710,
+    "lng": 77.2150,
+    "address": "South Extension, New Delhi",
+    "phone": "011-24691111"
+  },
+  {
+    "name": "Canara Bank South Extension",
+    "type": "bank",
+    "lat": 28.5700,
+    "lng": 77.2140,
+    "address": "South Extension Part 1",
+    "phone": "011-24692222"
+  },
+  {
+    "name": "Total Petrol Pump South Extension",
+    "type": "petrol",
+    "lat": 28.5715,
+    "lng": 77.2155,
+    "address": "Ring Road, South Extension",
+    "phone": "011-24693333"
+  }
+]
