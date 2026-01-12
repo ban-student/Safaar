@@ -1,0 +1,599 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verified Guides - Delhi Tourist Safety</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #e87fd3, #e37171);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .filters {
+            padding: 20px 30px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .guides-grid {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .guide-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            background: white;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .guide-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .guide-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .guide-info h3 {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 1.1rem;
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #10b981;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .female-safe-badge {
+            background: #ec4899;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .guide-details {
+            margin: 15px 0;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            color: #666;
+        }
+
+        .detail-row svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            color: #ff6b6b;
+        }
+
+        .speciality {
+            background: #f8f9ff;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .languages {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .language-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #10b981;
+            margin: 10px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .safety-features {
+            background: #fef7f7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ec4899;
+        }
+
+        @media (max-width: 768px) {
+            .guides-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .filters {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <button onclick="window.location.href='dashboard.html'" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 15px; border-radius: 8px; cursor: pointer;">
+            ← Back to Dashboard
+        </button>
+        <div style="text-align: center; flex: 1;">
+            <h1>🛡 Verified Guides</h1>
+            <p>Safe & Trusted Tour Guides in Delhi | Special Focus on Women's Safety</p>
+        </div>
+    </div>
+</div>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterGuides('all')">All Guides</button>
+            <button class="filter-btn" onclick="filterGuides('female')">Female Guides</button>
+        </div>
+
+        <div class="guides-grid" id="guidesGrid">
+            <!-- Guide cards will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const guides = [
+            {
+                id: 1,
+                name: "Priya Sharma",
+                rating: 4.9,
+                reviews: 127,
+                speciality: "Historical Sites & Cultural Tours",
+                languages: ["Hindi", "English", "French"],
+                experience: "8 years",
+                location: "Red Fort, Chandni Chowk",
+                price: "₹1,500/day",
+                gender: "female",
+                femalePreferred: true,
+                safetyFeatures: ["Female guide", "Group tours only", "Emergency contact sharing", "GPS tracking"],
+                description: "Specialized in Delhi's rich history with focus on women's safety during tours.",
+                phone: "+91 98765 43210",
+                categories: ["female", "female-safe", "historical", "cultural"]
+            },
+            {
+                id: 2,
+                name: "Rajesh Kumar",
+                rating: 4.7,
+                reviews: 89,
+                speciality: "Street Food & Market Tours",
+                languages: ["Hindi", "English", "German"],
+                experience: "6 years",
+                location: "Chandni Chowk, Karim's",
+                price: "₹1,200/day",
+                gender: "male",
+                femalePreferred: true,
+                safetyFeatures: ["Mixed gender groups welcome", "Safety briefings", "Known safe routes", "Local police contacts"],
+                description: "Expert in Delhi's culinary scene with emphasis on safe food experiences for all travelers.",
+                phone: "+91 98765 43211",
+                categories: ["male", "female-safe", "cultural"]
+            },
+            {
+                id: 3,
+                name: "Sunita Verma",
+                rating: 4.8,
+                reviews: 156,
+                speciality: "Religious Sites & Spiritual Tours",
+                languages: ["Hindi", "English", "Punjabi"],
+                experience: "10 years",
+                location: "Akshardham, Lotus Temple",
+                price: "₹1,800/day",
+                gender: "female",
+                femalePreferred: true,
+                safetyFeatures: ["Female guide", "Modest dress guidance", "Prayer time respect", "Cultural sensitivity"],
+                description: "Experienced female guide specializing in spiritual and religious tourism with cultural awareness.",
+                phone: "+91 98765 43212",
+                categories: ["female", "female-safe", "cultural"]
+            },
+            {
+                id: 4,
+                name: "Amit Singh",
+                rating: 4.6,
+                reviews: 73,
+                speciality: "Modern Delhi & Business Districts",
+                languages: ["Hindi", "English", "Japanese"],
+                experience: "5 years",
+                location: "Connaught Place, India Gate",
+                price: "₹1,300/day",
+                gender: "male",
+                femalePreferred: false,
+                safetyFeatures: ["Business district tours", "Day time only", "Public transport guidance", "Safety tips"],
+                description: "Modern Delhi specialist with focus on contemporary attractions and business areas.",
+                phone: "+91 98765 43213",
+                categories: ["male", "historical"]
+            },
+            {
+                id: 5,
+                name: "Kavita Jindal",
+                rating: 4.9,
+                reviews: 198,
+                speciality: "Art & Craft Workshops",
+                languages: ["Hindi", "English", "French", "Spanish"],
+                experience: "12 years",
+                location: "Dilli Haat, Crafts Museum",
+                price: "₹2,000/day",
+                gender: "female",
+                femalePreferred: true,
+                safetyFeatures: ["Female guide", "Indoor activities", "Small groups", "Skill development focus"],
+                description: "Award-winning female guide specializing in traditional crafts and art forms of Delhi.",
+                phone: "+91 98765 43214",
+                categories: ["female", "female-safe", "cultural"]
+            },
+            {
+                id: 6,
+                name: "Mohammed Ali",
+                rating: 4.5,
+                reviews: 92,
+                speciality: "Mughal Architecture & History",
+                languages: ["Hindi", "English", "Urdu", "Arabic"],
+                experience: "9 years",
+                location: "Red Fort, Humayun's Tomb",
+                price: "₹1,600/day",
+                gender: "male",
+                femalePreferred: false,
+                safetyFeatures: ["Historical expertise", "Respectful approach", "Cultural sensitivity", "Mixed groups"],
+                description: "Expert historian specializing in Mughal era architecture and Delhi's Islamic heritage.",
+                phone: "+91 98765 43215",
+                categories: ["male", "historical"]
+            }
+        ];
+
+        function renderGuides(guidesToRender = guides) {
+            const grid = document.getElementById('guidesGrid');
+            grid.innerHTML = '';
+
+            guidesToRender.forEach(guide => {
+                const guideCard = document.createElement('div');
+                guideCard.className = 'guide-card';
+                guideCard.innerHTML = `
+                    <div class="verified-badge">
+                        ✓ Verified
+                    </div>
+                    <div class="guide-header">
+                        <div class="guide-avatar">
+                            ${guide.name.charAt(0)}
+                        </div>
+                        <div class="guide-info">
+                            <h3>${guide.name}</h3>
+                            <div class="rating">
+                                <span class="stars">★★★★★</span>
+                                <span>${guide.rating} (${guide.reviews} reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${guide.femalePreferred ? '<div class="female-safe-badge">👩 Female-Safe Tours</div>' : ''}
+                    
+                    <div class="speciality">
+                        <strong>${guide.speciality}</strong>
+                    </div>
+                    
+                    <div class="guide-details">
+                        <div class="detail-row">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            ${guide.location}
+                        </div>
+                        <div class="detail-row">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                            ${guide.experience} experience
+                        </div>
+                    </div>
+                    
+                    <div class="languages">
+                        ${guide.languages.map(lang => `<span class="language-tag">${lang}</span>`).join('')}
+                    </div>
+
+                    <div class="price">${guide.price}</div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="viewGuide(${guide.id})">
+                            View Details
+                        </button>
+                        <button class="btn btn-secondary" onclick="contactGuide(${guide.id})">
+                            📞 Contact
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(guideCard);
+            });
+        }
+
+        function filterGuides(category) {
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            let filteredGuides;
+            if (category === 'all') {
+                filteredGuides = guides;
+            } else {
+                filteredGuides = guides.filter(guide => guide.categories.includes(category));
+            }
+            
+            renderGuides(filteredGuides);
+        }
+
+        function viewGuide(guideId) {
+            const guide = guides.find(g => g.id === guideId);
+            const modal = document.getElementById('guideModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalContent.innerHTML = `
+                <h2>${guide.name}</h2>
+                <div class="rating" style="margin: 10px 0;">
+                    <span class="stars">★★★★★</span>
+                    <span>${guide.rating} (${guide.reviews} reviews)</span>
+                </div>
+                
+                <p style="margin: 15px 0; color: #666;">${guide.description}</p>
+                
+                <div class="speciality">
+                    <strong>Speciality:</strong> ${guide.speciality}
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>Languages:</strong> ${guide.languages.join(', ')}
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>Experience:</strong> ${guide.experience}
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>Location:</strong> ${guide.location}
+                </div>
+                
+                ${guide.safetyFeatures ? `
+                    <div class="safety-features">
+                        <h4 style="color: #ec4899; margin-bottom: 10px;">🛡 Safety Features:</h4>
+                        <ul style="margin-left: 20px;">
+                            ${guide.safetyFeatures.map(feature => `<li>${feature}</li>`).join('')}
+
+                        </ul>
+                    </div>
+                ` : ''}
+                
+                <div class="price" style="text-align: center; margin: 20px 0;">${guide.price}</div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="contactGuide(${guide.id})">
+                        📞 Contact Guide
+                    </button>
+                    <button class="btn btn-secondary" onclick="bookGuide(${guide.id})">
+                        📅 Book Tour
+                    </button>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('guideModal').style.display = 'none';
+        }
+
+        function contactGuide(guideId) {
+            const guide = guides.find(g => g.id === guideId);
+            alert('Contact ${guide.name} at ${guide.phone}\n\nFor your safety, we recommend:\n• Meeting in public places\n• Sharing your itinerary with family/friends\n• Using our in-app messaging for initial communication');
+        }
+
+        function bookGuide(guideId) {
+            const guide = guides.find(g => g.id === guideId);
+            alert('Booking ${guide.name} for a tour!\n\nYou will be redirected to the booking page where you can:\n• Select tour dates\n• Choose tour package\n• Make secure payment\n• Add safety preferences');
+            closeModal();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('guideModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the page
+        renderGuides();
+    </script>
+</body>
+</html>
