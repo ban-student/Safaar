@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFAR App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* App Header */
+        .app-header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .user-profile {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        /* Main App Container */
+        .app-container {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .welcome-section {
+            text-align: center;
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .welcome-section p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        /* Feature Cards */
+        .features-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+        }
+
+        .card-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .card-content p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active { background: rgba(76, 217, 100, 0.3); border: 1px solid rgba(76, 217, 100, 0.5); }
+        .status-available { background: rgba(52, 199, 89, 0.3); border: 1px solid rgba(52, 199, 89, 0.5); }
+        .status-offline { background: rgba(255, 159, 10, 0.3); border: 1px solid rgba(255, 159, 10, 0.5); }
+
+        /* Floating Action Buttons */
+        .fab-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .fab {
+            position: absolute;
+            bottom: 2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.4rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: auto;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab:active {
+            transform: scale(0.95);
+        }
+
+        .sos-fab {
+            left: 2rem;
+            background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+            animation: pulse 2s infinite;
+        }
+
+        .chat-fab {
+            right: 2rem;
+            background: linear-gradient(135deg, #5352ed 0%, #3742fa 100%);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: flex-end;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .modal {
+                align-items: center;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            .modal-content {
+                border-radius: 20px;
+                max-width: 500px;
+                width: 90%;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 1.5rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-btn {
+            background: #f5f5f5;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #e5e5e5;
+        }
+
+        /* SOS Modal */
+        .sos-content {
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .emergency-btn {
+            background: linear-gradient(135deg, #ff4757, #ff3742);
+            color: white;
+            border: none;
+            padding: 1.2rem 1rem;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .emergency-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        .emergency-btn span {
+            font-size: 1.5rem;
+        }
+
+        .location-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Chat Modal */
+        .chat-container {
+            height: 350px;
+            padding: 1rem 1.5rem;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            background: white;
+            border: 1px solid #e5e5e5;
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background: #5352ed;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-input-container {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e5e5e5;
+            border-radius: 20px;
+            outline: none;
+            background: #f8f9fa;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            background: #5352ed;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #3742fa;
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 1rem;
+            }
+
+            .feature-card {
+                padding: 1.2rem;
+            }
+
+            .fab {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .sos-fab {
+                left: 1.5rem;
+            }
+
+            .chat-fab {
+                right: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="app-logo">
+            <span>🛡</span>
+            SAFAR
+        </div>
+        <div class="user-profile">U</div>
+    </header>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <div class="welcome-section">
+            <h1>Stay Safe & Protected</h1>
+            <p>Your personal safety companion</p>
+        </div>
+
+        <div class="features-container">
+            <div class="feature-card" onclick="window.location.href='safety.html'">
+                <div class="status-badge status-active">Active</div>
+                <div class="card-header">
+                    <div class="feature-icon">📊</div>
+                    <div class="card-content">
+                        <h3>Safety Score & Geo-fencing</h3>
+                        <p>Monitor safety metrics and virtual boundaries</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" onclick="openFeature('verified-guides')">
+                <div class="status-badge status-available">Available</div>
+                <div class="card-header">
+                    <div class="feature-icon">👥</div>
+                    <div class="card-content">
+                        <h3>Verified Guides</h3>
+                        <p>Connect with trusted local guides</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" onclick="openFeature('digital-wallet')">
+                <div class="status-badge status-offline">Offline</div>
+                <div class="card-header">
+                    <div class="feature-icon">💳</div>
+                    <div class="card-content">
+                        <h3>Digital Wallet</h3>
+                        <p>Emergency payments without internet</p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <button class="fab sos-fab" onclick="openModal('sos-modal')" title="Emergency SOS">
+            🆘
+        </button>
+        <button class="fab chat-fab" onclick="openModal('chat-modal')" title="AI Assistant">
+            💬
+        </button>
+    </div>
+
+    <!-- SOS Modal -->
+    <div id="sos-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🆘 Emergency SOS</h2>
+                <button class="close-btn" onclick="closeModal('sos-modal')">&times;</button>
+            </div>
+            <div class="sos-content">
+                <p><strong>Choose Emergency Response</strong></p>
+                <div class="emergency-grid">
+                    <button class="emergency-btn" onclick="triggerEmergency('police')">
+                        <span>🚓</span>
+                        Police
+                    </button>
+                    <button class="emergency-btn" onclick="triggerEmergency('medical')">
+                        <span>🚑</span>
+                        Medical
+                    </button>
+                    <button class="emergency-btn" onclick="triggerEmergency('fire')">
+                        <span>🚒</span>
+                        Fire Dept
+                    </button>
+                    <button class="emergency-btn" onclick="triggerEmergency('contacts')">
+                        <span>📞</span>
+                        Contacts
+                    </button>
+                </div>
+                <div class="location-info">
+                    <div>📍 Location will be shared automatically</div>
+                    <div>⏰ Estimated response: 2-5 minutes</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Modal -->
+    <div id="chat-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💬 AI Assistant</h2>
+                <button class="close-btn" onclick="closeModal('chat-modal')">&times;</button>
+            </div>
+            <div class="chat-container" id="chat-container">
+                <div class="chat-message bot-message">
+                    Hi! I'm your AI Safety Assistant. How can I help you today?
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chat-input" placeholder="Type your message..." onkeypress="handleEnter(event)">
+                <button class="send-btn" onclick="sendMessage()">▶</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Feature Functions
+ function openFeature(featureName) {
+    if (featureName === 'verified-guides') {
+        window.location.href = 'guides.html';
+    } else if (featureName === 'digital-wallet') {
+        window.location.href = 'wallet.html';  // Add this line
+    } else {
+        const messages = {
+            'safety-score': 'Safety Score: 85/100\nGeo-fence zones: 3 active',
+            'digital-wallet': 'Emergency funds: Available\nOffline mode: Enabled'
+        };
+        alert(messages[featureName]);
+    }
+}
+
+        // SOS Functions
+        function triggerEmergency(type) {
+            const messages = {
+                'police': 'Contacting Police...\nCalling emergency services\nLocation shared',
+                'medical': 'Contacting Medical Emergency...\nNearest hospital located\nETA: 2-4 minutes',
+                'fire': 'Contacting Fire Department...\nFire services dispatched\nETA: 4-6 minutes',
+                'contacts': 'Notifying Emergency Contacts...\n3 contacts notified\nLocation shared'
+            };
+            alert(messages[type]);
+            closeModal('sos-modal');
+        }
+
+        // Chat Functions
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const chatContainer = document.getElementById('chat-container');
+            
+            if (input.value.trim() === '') return;
+
+            // Add user message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user-message';
+            userMessage.textContent = input.value;
+            chatContainer.appendChild(userMessage);
+
+            // Bot response
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'chat-message bot-message';
+                botMessage.textContent = getBotResponse(input.value);
+                chatContainer.appendChild(botMessage);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 1000);
+
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function getBotResponse(userInput) {
+            const responses = {
+                'help': 'I can assist with emergencies, safety tips, and connecting you with verified guides.',
+                'emergency': 'For emergencies, use the SOS button (🆘) at the bottom left!',
+                'location': 'I can help share your location with trusted contacts or emergency services.',
+                'guides': '12 verified guides are available in your area with 4.8/5 rating.',
+                'wallet': 'Your digital wallet is active with offline emergency funds.',
+                'default': 'I\'m here to help with your safety needs. Ask about emergencies, guides, or location services.'
+            };
+
+            const input = userInput.toLowerCase();
+            for (let key in responses) {
+                if (input.includes(key)) {
+                    return responses[key];
+                }
+            }
+            return responses['default'];
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
