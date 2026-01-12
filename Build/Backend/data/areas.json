@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Connaught Place",
+    "score": 8,
+    "lat": 28.6315,
+    "lng": 77.2167,
+    "radius": 800,
+    "description": "Central business district with good security and lighting"
+  },
+  {
+    "name": "Karol Bagh",
+    "score": 4,
+    "lat": 28.6516,
+    "lng": 77.1907,
+    "radius": 600,
+    "description": "Busy shopping area with moderate safety concerns"
+  },
+  {
+    "name": "Saket",
+    "score": 2,
+    "lat": 28.5245,
+    "lng": 77.2066,
+    "radius": 400,
+    "description": "High crime area, exercise caution especially at night"
+  },
+  {
+    "name": "Hauz Khas",
+    "score": 6,
+    "lat": 28.5494,
+    "lng": 77.2001,
+    "radius": 650,
+    "description": "Popular nightlife area with moderate safety"
+  },
+  {
+    "name": "Chandni Chowk",
+    "score": 5,
+    "lat": 28.6506,
+    "lng": 77.2303,
+    "radius": 500,
+    "description": "Historic market area, crowded during peak hours"
+  },
+  {
+    "name": "Lajpat Nagar",
+    "score": 7,
+    "lat": 28.5678,
+    "lng": 77.2431,
+    "radius": 700,
+    "description": "Residential and commercial area with good safety record"
+  },
+  {
+    "name": "South Extension",
+    "score": 9,
+    "lat": 28.5706,
+    "lng": 77.2144,
+    "radius": 800,
+    "description": "Upscale shopping area with excellent security"
+  },
+  {
+    "name": "Dwarka",
+    "score": 8,
+    "lat": 28.5921,
+    "lng": 77.0460,
+    "radius": 900,
+    "description": "Well-planned residential area with good safety infrastructure"
+  },
+  {
+    "name": "Rohini",
+    "score": 6,
+    "lat": 28.7041,
+    "lng": 77.1025,
+    "radius": 700,
+    "description": "Suburban area with moderate safety levels"
+  },
+  {
+    "name": "Janakpuri",
+    "score": 7,
+    "lat": 28.6219,
+    "lng": 77.0919,
+    "radius": 650,
+    "description": "Residential area with good community policing"
+  },
+  {
+    "name": "Vasant Kunj",
+    "score": 8,
+    "lat": 28.5244,
+    "lng": 77.1589,
+    "radius": 750,
+    "description": "Upscale residential area with private security"
+  },
+  {
+    "name": "Gurgaon",
+    "score": 7,
+    "lat": 28.4595,
+    "lng": 77.0266,
+    "radius": 1000,
+    "description": "IT hub with corporate security but traffic concerns"
+  }
+]
